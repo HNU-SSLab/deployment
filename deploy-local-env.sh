@@ -147,6 +147,11 @@ sudo ln -sfn $(pwd)/ /vagrant
 
 ####################
 
+ansible-galaxy collection install community.general
+ansible-galaxy install -r requirements.yml
+
+####################
+
 ss_announce "Configuring environment"
 ss_status "Running ansible playbook: ansible/ncloud.yml"
 
