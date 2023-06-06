@@ -97,6 +97,23 @@ REQ_ANSIBLE_VER="2.9.13"
 
 ss_announce "Installing Dependencies"
 
+PYTHON_VERSION=$(python3 -V 2>&1 | grep -Po '(?<=Python )(.+)')
+PARSE_PYTHON_VERSION=$(echo "${PYTHON_VERSION//./}")
+echo $PARSE_PYTHON_VERSION
+
+if [[ $PARSE_PYTHON_VERSION -gt "380" ]]; then
+    ss_status "python already updated"
+else
+    ss_status "Update python3.8"
+    sudo dnf module -y install python38
+    sudo update-alternatives --remove-all python3
+    sudo update-alternatives --install \
+        /usr/bin/python3 \
+        python3 \
+        /usr/bin/python3.8 \
+        1
+fi
+
 which pip >/dev/null 2>&1
 PIP_INSTALLED=$?
 
