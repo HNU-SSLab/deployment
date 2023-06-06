@@ -123,6 +123,7 @@ else
     sudo pip3 install --upgrade 'pip<21.0'
     sudo pip3 install markupsafe typing ansible==2.9.13
     sudo pip3 install "Jinja<3.1"
+    sudo ansible-galaxy collection install community.general
 fi
 
 ####################
