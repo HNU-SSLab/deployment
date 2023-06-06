@@ -97,6 +97,18 @@ REQ_ANSIBLE_VER="2.9.13"
 
 ss_announce "Installing Dependencies"
 
+which yum >/dev/null 2>&1
+YUM_INSTALLED=$?
+if [[ $YUM_INSTALLED -eq 0 ]]; then
+    ss_status "yum already installed"
+else
+    ss_status "Installing yum"
+    sudo echo "deb http://archive.ubuntu.com/ubuntu bionic main restricted universe multiverse" >> /etc/apt/sources.list
+    sudo echo "deb http://archive.ubuntu.com/ubuntu bionic-security main restricted universe multiverse" >> /etc/apt/sources.list
+    sudo echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted universe multiverse" >> /etc/apt/sources.list
+    sudo apt update -y
+    sudo apt install -y yum
+
 which pip >/dev/null 2>&1
 PIP_INSTALLED=$?
 
@@ -110,6 +122,7 @@ else
     sudo yum install -y python3-pip
     sudo pip3 install --upgrade 'pip<21.0'
     sudo pip3 install markupsafe typing ansible==2.9.13
+    sudo pip3 install "Jinja<3.1"
 fi
 
 ####################
@@ -131,10 +144,10 @@ sudo ln -sfn $(pwd)/ /vagrant
 ####################
 
 ss_announce "Configuring environment"
-ss_status "Running ansible playbook: ansible/server.yml"
+ss_status "Running ansible playbook: ansible/ncloud.yml"
 
 ANSIBLE_CALLBACK_WHITELIST=profile_tasks \
-ansible-playbook ansible/server.yml \
+ansible-playbook ansible/ncloud.yml \
     --ask-become-pass \
     -i ansible/hosts.txt \
     --extra-vars "GROUND=NONE" \
